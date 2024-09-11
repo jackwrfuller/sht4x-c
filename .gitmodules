@@ -1,3 +1,6 @@
 [submodule "lib/sht4x"]
 	path = lib/sht4x
 	url = git@github.com:Sensirion/raspberry-pi-i2c-sht4x.git
+[submodule "lib/cJSON"]
+	path = lib/cJSON
+	url = git@github.com:DaveGamble/cJSON.git
