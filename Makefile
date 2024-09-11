@@ -6,7 +6,7 @@ CFLAGS = -std=c99 -Os -Wall -fstrict-aliasing -Wstrict-aliasing=1 -Wsign-convers
 
 #./lib/sht4x/sensirion_i2c_hal.h ./lib/sht4x/sensirion_i2c_hal.c 
 LIBS = $(wildcard ${SRC_DIR}/lib/sht4x/*.c) $(wildcard ${SRC_DIR}/lib/sht4x/*.h)\
-	   $(wildcard ${SRC_DIR}/lib/cJSON/*)
+	   ${SRC_DIR}/lib/cJSON/cJSON.c ${SRC_DIR}/lib/cJSON/cJSON.h
 SRC = ./src/reading.c
 
 
