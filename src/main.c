@@ -62,36 +62,33 @@ void post_json(char* hostname, int portno, char* path, const char* json) {
         sent += bytes;
     } while (sent < total);
 
-    // memset(response, 0, sizeof(response));
-    // total = sizeof(response) - 1;
-    // received = 0;
-    // do {
-    //     bytes = read(sockfd, response+received, total-received);
-    //     if (bytes < 0) {
-    //         error("Error writing message to socket");
-    //     }
-    //     if (bytes == 0) {
-    //         break;
-    //     }
-    //     sent += bytes;
-    // } while (received < total);
-    //
-    // if (received == total) {
-    //     error("Error storing complete response from socket");
-    // }
-
     close(sockfd);
 }
 
 
-int main() {
+int main(int argc, char* argv[]) {
     Reading reading;
     takeReading(&reading);
     printReading(&reading);
     
     char* json = readingToJSON(&reading);
+    
 
-    post_json("localhost", 9001, "/", json);
+
+    char* hostname;
+    int port = 80;
+    char* path = "/";
+    
+    if (argc < 4) {
+        puts("Parameters: <hostname> <port> <path>");
+        exit(0);
+    }
+    
+    hostname = argv[1];
+    port = atoi(argv[2]);
+    path = argv[3];
+
+    post_json(hostname, port, path, json);
 
     free(json);
     return 0;
