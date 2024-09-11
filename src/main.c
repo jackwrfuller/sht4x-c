@@ -28,7 +28,7 @@ void post_json(char* hostname, int portno, char* path, const char* json) {
     char message[1024];
 
     sprintf(message, msg_fmt, path, strlen(json), json);
-    printf("Request:\n%s\n", message);
+    printf("\nRequest:\n%s\n", message);
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
@@ -90,7 +90,6 @@ int main() {
     printReading(&reading);
     
     char* json = readingToJSON(&reading);
-    printf("%s\n", json);
 
     post_json("localhost", 9001, "/", json);
 
