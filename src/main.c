@@ -19,15 +19,21 @@ void error(const char* msg) {
  *
  */
 void post_json(char* hostname, int portno, char* path, const char* json) {
-    char* msg_fmt = "POST %s HTTP/1.1\nHost: localhost\nAccept: application/json\nContent-Type: application/json\nContent-Length: %d\n\n%s\r\n\r\n";
+    char* msg_fmt = "POST %s HTTP/1.1\r\n"
+                    "Host: %s\r\n"
+                    "Accept: application/json\r\n"
+                    "Content-Type: application/json\r\n"
+                    "Connection: close\r\n"
+                    "Content-Length: %d\r\n\r\n%s\r\n\r\n";
     
     struct hostent* host;
     struct sockaddr_in serv_addr;
     int sockfd, bytes, sent, received, total;
     
     char message[1024];
+    char response[4096];
 
-    sprintf(message, msg_fmt, path, strlen(json), json);
+    sprintf(message, msg_fmt, path, hostname, (int)strlen(json), json);
     printf("\nRequest:\n%s\n", message);
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -62,6 +68,18 @@ void post_json(char* hostname, int portno, char* path, const char* json) {
         sent += bytes;
     } while (sent < total);
 
+    printf("\nResponse:\n%s\n", message);
+    memset(response, 0, sizeof(response));
+    while ((received = read(sockfd, response, sizeof(response)-1)) > 0) {
+        response[received] = '\0';
+        printf("%s", response);
+        memset(response, 0, sizeof(response));
+    }
+    if (received < 0) {
+        error("Error reading response from socket");
+    }
+    printf("\n");
+
     close(sockfd);
 }
 
@@ -73,11 +91,9 @@ int main(int argc, char* argv[]) {
     
     char* json = readingToJSON(&reading);
     
-
-
     char* hostname;
     int port = 80;
-    char* path = "/";
+    char* path;
     
     if (argc < 4) {
         puts("Parameters: <hostname> <port> <path>");

@@ -59,11 +59,11 @@ char* readingToJSON(Reading* reading) {
     
     temp = cJSON_CreateNumber(reading->temp);
     humidity = cJSON_CreateNumber(reading->humidity);
-    serial_number = cJSON_CreateNumber(reading->serial_number);
+    //serial_number = cJSON_CreateNumber(reading->serial_number);
 
     cJSON_AddItemToObject(reading_json, "temp", temp);
     cJSON_AddItemToObject(reading_json, "humidity", humidity);
-    cJSON_AddItemToObject(reading_json, "serial", serial_number);
+    //cJSON_AddItemToObject(reading_json, "serial", serial_number);
 
     json_string = cJSON_PrintUnformatted(reading_json);
 
